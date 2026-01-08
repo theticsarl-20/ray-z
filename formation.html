@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAY-Z - Formation Professionnelle</title>
+    <!-- Favicon animé -->
+    <link rel="icon" type="image/png" href="image/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="image/favicon.svg" />
+    <link rel="shortcut icon" href="image/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="image/apple-touch-icon.png" />
+    <link rel="manifest" href="image/site.webmanifest" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- VARIABLES & RESET (copiées de index.html) --- */
+        :root {
+            --primary: #0096D6;       /* Bleu Tech */
+            --primary-dark: #007bb0;
+            --secondary: #FF6B35;     /* Orange Action */
+            --dark: #0f172a;          /* Bleu nuit très sombre */
+            --text: #334155;          /* Gris texte */
+            --light: #FFFFFF;
+            --bg-gray: #f1f5f9;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 150, 214, 0.05);
+            --radius: 16px;
+            --header-height: 70px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--text);
+            background-color: var(--light);
+            overflow-x: hidden;
+            padding-top: var(--header-height);
+        }
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; font-weight: 700; line-height: 1.2; color: var(--dark); }
+        p { line-height: 1.7; margin-bottom: 1rem; }
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        img { width: 100%; height: auto; object-fit: cover; display: block; }
+        ul { list-style: none; }
+        /* --- SCROLL ANIMATIONS --- */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .scroll-animate.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* --- UTILS & BUTTONS (copiées de index.html) --- */
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 150, 214, 0.3); }
+        .btn-shop {
+            background: linear-gradient(135deg, var(--secondary) 0%, #e85d2a 100%);
+            color: white;
+        }
+        .btn-shop:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3); }
+        .section-padding { padding: 80px 0; }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        .section-header h2::after {
+            content: ''; display: block; width: 60px; height: 4px;
+            background: var(--primary); margin: 10px auto 0; border-radius: 2px;
+        }
+        .section-header p { color: #64748b; max-width: 600px; margin: 0 auto; font-size: 1.1rem; }
+        /* --- HEADER (copié de index.html) --- */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height);
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px);
+            box-shadow: 0 1px 15px rgba(0,0,0,0.05); z-index: 1000;
+            display: flex; align-items: center;
+        }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo a { display: flex; align-items: center; gap: 10px; }
+        .logo h1 { font-size: 1.5rem; color: var(--primary); margin: 0; letter-spacing: -0.5px; }
+        .logo img { width: 40px; height: 40px; }
+        nav ul { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; } /* Ajout flex-wrap et réduction du gap */
+        nav a { font-weight: 600; font-size: 0.9rem; position: relative; } /* Réduction de la taille */
+        nav a::after {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
+            background: var(--primary); transition: var(--transition);
+        }
+        nav a:hover::after, nav a.active::after { width: 100%; }
+        nav a:hover, nav a.active { color: var(--primary); }
+        /* Style spécifique pour les boutons dans la nav */
+        nav .nav-shop, nav .nav-formation, nav .nav-galerie {
+            color: white;
+            padding: 8px 12px; /* Réduction du padding */
+            border-radius: 50px;
+            margin-left: 8px; /* Réduction de la marge */
+            box-shadow: 0 4px 10px rgba(255, 107, 53, 0.3);
+            font-size: 0.85rem; /* Réduction de la taille du texte */
+        }
+        nav .nav-shop:hover, nav .nav-formation:hover, nav .nav-galerie:hover {
+            color: white;
+            transform: translateY(-1px);
+        }
+        nav .nav-shop { background: var(--secondary); }
+        nav .nav-formation { background: linear-gradient(135deg, var(--primary) 0%, #005f8a 100%); }
+        nav .nav-galerie { background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%); }
+        nav .nav-formation { background: linear-gradient(135deg, var(--primary) 0%, #005f8a 100%); } /* Assure la couleur du bouton Formation */
+        nav .nav-shop:hover { background: #e85d2a; }
+        nav .nav-formation:hover { background: #005f8a; }
+        nav .nav-galerie:hover { background: #9b59b6; }
+        nav .nav-shop::after, nav .nav-formation::after, nav .nav-galerie::after { content: none; }
+        .mobile-toggle { display: none; font-size: 1.5rem; cursor: pointer; color: var(--dark); }
+        /* --- HERO CAROUSEL SECTION --- */
+        .hero {
+            height: calc(100vh - var(--header-height));
+            min-height: 500px; /* Ajusté pour les petits écrans */
+            position: relative; overflow: hidden;
+        }
+        .hero-slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center;
+            opacity: 0; visibility: hidden; transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+            background-size: cover; background-position: center;
+            /* Réduction du zoom demandé */
+            transform: scale(1.05); 
+        }
+        .hero-slide.active { 
+            opacity: 1; 
+            visibility: visible; 
+            transform: scale(1); /* Retour à la normale pour l'actif */
+        }
+        /* Transition spécifique pour l'entrée */
+        .hero-slide.fadeIn { transform: scale(1.1); }
+        .hero-slide.fadeIn.active { transform: scale(1); }
+        /* Transition spécifique pour le glissement */
+        .hero-slide.slideIn { transform: translateX(100%); }
+        .hero-slide.slideIn.active { transform: translateX(0); }
+        /* Transition spécifique pour le zoom */
+        .hero-slide.zoomIn { transform: scale(0.9); }
+        .hero-slide.zoomIn.active { transform: scale(1); }
+        /* Transition spécifique pour le glissement depuis la gauche */
+        .hero-slide.slideInLeft { transform: translateX(-100%); }
+        .hero-slide.slideInLeft.active { transform: translateX(0); }
+        /* Transition spécifique pour le fondu */
+        .hero-slide.fadeInOnly { opacity: 0; }
+        .hero-slide.fadeInOnly.active { opacity: 1; }
+        .hero-slide::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.4) 100%);
+        }
+        .hero-content {
+            position: relative; z-index: 2; color: var(--light); width: 750px;
+            transform: translateY(30px); opacity: 0; transition: all 0.8s ease 0.3s;
+        }
+        .hero-slide.active .hero-content { transform: translateY(0); opacity: 1; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; text-shadow: 0 2px 15px rgba(0,0,0,0.3); color: var(--light); }
+        .hero p { font-size: 1.2rem; margin-bottom: 30px; color: rgba(255,255,255,0.9); }
+        .hero-btns { display: flex; gap: 15px; flex-wrap: wrap; }
+        .hero-slide video {
+            position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
+            width: auto; height: auto; z-index: 0; transform: translate(-50%, -50%);
+            filter: brightness(0.7);
+        }
+        .hero-slide[data-type="video"]::before {
+             background: rgba(15, 23, 42, 0.4);
+        }
+        .slide-controls {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 12px; z-index: 10;
+        }
+        .control-dot {
+            width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.3);
+            cursor: pointer; transition: 0.3s; border: 2px solid transparent;
+        }
+        .control-dot.active { background: white; transform: scale(1.2); border-color: rgba(255,255,255,0.5); }
+        /* --- ABOUT SECTION --- */
+        .about { background: white; }
+        .about-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px; /* Réduction du gap */ align-items: center;
+        }
+        .about-image {
+            position: relative; border-radius: var(--radius); overflow: hidden;
+            box-shadow: var(--shadow-lg); height: 100%; min-height: 350px; /* Réduction de la hauteur min */
+            background: var(--bg-gray); /* Placeholder */
+            display: flex; align-items: center; justify-content: center;
+        }
+        .about-image i { font-size: 5rem; color: var(--primary); } /* Placeholder icon */
+        .about-badge {
+            position: absolute; bottom: 20px; right: 20px; /* Réduction de la position */
+            background: white; padding: 15px; border-radius: var(--radius); /* Réduction du padding */
+            box-shadow: var(--shadow); text-align: center;
+        }
+        .about-badge h4 { font-size: 2rem; color: var(--primary); margin: 0; } /* Réduction de la taille */
+        .about-badge span { font-size: 0.8rem; font-weight: 600; color: var(--dark); } /* Réduction de la taille */
+        .about-text h3 { font-size: 1.6rem; margin-bottom: 15px; color: var(--primary); } /* Réduction de la taille */
+        .about-stats {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; /* Réduction du gap */ margin-top: 20px; /* Réduction de la marge */
+        }
+        .stat-item { text-align: center; padding: 12px; background: var(--bg-gray); border-radius: 12px; } /* Réduction du padding */
+        .stat-item strong { display: block; font-size: 1.5rem; color: var(--dark); font-weight: 800; } /* Réduction de la taille */
+        .stat-item span { font-size: 0.75rem; color: #64748b; } /* Réduction de la taille */
+        /* --- FORMATIONS GRID --- */
+        .formations { background: var(--bg-gray); }
+        .formations-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ajustement pour mobile */ gap: 20px; /* Réduction du gap */
+        }
+        .formation-card {
+            background: white; padding: 30px 20px; /* Réduction du padding */ border-radius: var(--radius);
+            text-align: center; transition: var(--transition); border: 1px solid rgba(0,0,0,0.05);
+            display: flex; flex-direction: column; align-items: center;
+            position: relative; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .formation-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        .formation-card:hover::before {
+            transform: scaleX(1);
+        }
+        .formation-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
+        .formation-icon {
+            width: 70px; height: 70px; background: rgba(0, 150, 214, 0.1); /* Réduction de la taille */
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; color: var(--primary); margin-bottom: 20px; transition: var(--transition); /* Réduction de la taille */
+        }
+        .formation-card:hover .formation-icon { background: var(--primary); color: white; transform: rotateY(180deg); }
+        .formation-card h3 { font-size: 1.2rem; margin-bottom: 12px; color: var(--dark); } /* Réduction de la taille */
+        .formation-card p { color: #64748b; margin-bottom: 10px; flex-grow: 1; font-size: 0.9rem; } /* Réduction de la taille */
+        .formation-card .duration { display: block; font-weight: 600; color: var(--secondary); margin-top: 8px; font-size: 0.85rem; } /* Réduction de la taille */
+        /* --- CONTACT --- */
+        .contact-container {
+            background: white; border-radius: var(--radius); box-shadow: var(--shadow-lg);
+            overflow: hidden; display: grid; grid-template-columns: 1fr; /* Uniquement une colonne sur mobile */
+        }
+        .contact-info {
+            background: var(--primary); color: white; padding: 40px; /* Réduction du padding */
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .contact-info h3 { color: white; margin-bottom: 15px; } /* Réduction de la marge */
+        .info-item { display: flex; align-items: center; margin-bottom: 20px; } /* Réduction de la marge */
+        .info-item i {
+            width: 35px; height: 35px; background: rgba(255,255,255,0.2); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; margin-right: 12px; /* Réduction de la marge */
+        }
+        .contact-form { padding: 40px; } /* Réduction du padding */
+        .form-group { margin-bottom: 15px; } /* Réduction de la marge */
+        .form-row { display: flex; gap: 15px; } /* Réduction du gap */
+        .form-row .form-group { flex: 1; }
+        .form-control {
+            width: 100%; padding: 12px; /* Réduction du padding */ border: 1px solid #e2e8f0; border-radius: 8px;
+            font-family: inherit; font-size: 0.9rem; /* Réduction de la taille */ transition: var(--transition); background: #f8fafc;
+        }
+        .form-control:focus { border-color: var(--primary); outline: none; background: white; box-shadow: 0 0 0 3px rgba(0,150,214,0.1); }
+        /* --- FLOATING WHATSAPP BUTTON --- */
+        @keyframes swing {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            10% { transform: rotate(15deg) scale(1.1); }
+            20% { transform: rotate(-10deg) scale(1.1); }
+            30% { transform: rotate(5deg) scale(1.1); }
+            40% { transform: rotate(-5deg) scale(1.1); }
+            50% { transform: rotate(0deg) scale(1); }
+        }
+        .whatsapp-float {
+            position: fixed;
+            width: 55px; /* Réduction de la taille */
+            height: 55px; /* Réduction de la taille */
+            bottom: 30px; /* Réduction de la position */
+            right: 30px; /* Réduction de la position */
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 28px; /* Réduction de la taille */
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            animation: swing 6s ease-in-out infinite 3s; 
+        }
+        .whatsapp-float:hover {
+            background-color: #128c7e;
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 2px 2px 15px rgba(37, 211, 102, 0.7);
+            animation: none;
+        }
+        /* --- FOOTER (copié de index.html) --- */
+        footer { 
+            background: #0f172a; 
+            color: #94a3b8; 
+            padding: 40px 0 20px; /* Réduit le padding */
+            font-size: 0.9rem; /* Réduction de la taille */
+            position: relative;
+        }
+        .footer-grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Ajustement pour mobile */
+            gap: 20px; /* Réduit le gap */
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            padding-bottom: 25px; /* Réduit le padding */
+            margin-bottom: 15px; /* Réduit le margin */
+        }
+        .footer-col h4 { color: white; font-size: 1rem; margin-bottom: 15px; } /* Réduit la taille et le margin */
+        .footer-col ul li { margin-bottom: 8px; } /* Réduit le margin */
+        .footer-col a:hover { color: var(--primary); }
+        .footer-col .social-links a { 
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.1); /* Réduit la taille */
+            color: white; margin-right: 8px; font-size: 0.85rem; /* Réduit la taille */
+        }
+        .footer-col .social-links a:hover { background: var(--primary); }
+        .copyright { 
+            text-align: center; 
+            font-size: 0.75rem; /* Réduit la taille */
+            color: #64748b; 
+            padding-top: 15px; /* Réduit le padding */
+        }
+        /* Footer Map */
+        .footer-map {
+            margin-top: 20px; /* Réduit le margin */
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            height: 150px; /* Réduit la hauteur */
+        }
+        .footer-map iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        /* --- RESPONSIVE (copié de index.html) --- */
+        @media (max-width: 1200px) {
+            .hero h1 { font-size: 3rem; }
+        }
+        @media (max-width: 992px) {
+            .about-grid, .contact-container { grid-template-columns: 1fr; }
+            .contact-info { padding: 40px; text-align: center; }
+            .contact-info .info-item { justify-content: center; }
+            .contact-form { padding: 40px; }
+            .hero h1 { font-size: 2.5rem; }
+            .section-padding { padding: 60px 0; }
+        }
+        @media (max-width: 768px) {
+            .section-padding { padding: 50px 0; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1rem; }
+            .hero-btns { flex-direction: column; align-items: flex-start; }
+            .hero-btns .btn { width: 100%; justify-content: center; }
+            nav { 
+                display: none; 
+                position: fixed; 
+                top: var(--header-height); 
+                left: 0; 
+                width: 100%; 
+                height: calc(100vh - var(--header-height));
+                background: white; 
+                padding: 25px 0; /* Réduction du padding */
+                box-shadow: var(--shadow);
+                overflow-y: auto;
+            }
+            nav.active { display: block; }
+            nav ul { 
+                flex-direction: column; 
+                gap: 15px; /* Réduction du gap */
+                padding: 0 15px; /* Réduction du padding */
+                text-align: center;
+            }
+            nav ul li { width: 100%; }
+            nav a { 
+                display: block; 
+                padding: 10px 0; /* Réduction du padding */
+                font-size: 0.95rem; /* Réduction de la taille */
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+            }
+            nav .nav-shop, nav .nav-formation, nav .nav-galerie { 
+                margin: 12px auto 0; /* Réduction de la marge */
+                width: 85%; /* Légère réduction de la largeur */
+                padding: 8px 10px; /* Réduction du padding */
+            }
+            .mobile-toggle { display: block; }
+            .about-grid { gap: 25px; } /* Réduction du gap */
+            .about-image { min-height: 300px; } /* Réduction de la hauteur */
+            .about-stats { grid-template-columns: 1fr; gap: 12px; } /* Réduction du gap */
+            .formations-grid { grid-template-columns: 1fr; } /* Une colonne sur mobile */
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .footer-col .social-links { justify-content: center; }
+            .form-row { flex-direction: column; gap: 0; }
+            .whatsapp-float { width: 50px; height: 50px; bottom: 20px; right: 20px; font-size: 24px; }
+            .section-header h2 { font-size: 1.8rem; }
+            .section-header p { font-size: 1rem; }
+            .modal-content {
+                margin: 10px;
+            }
+            .modal-media-container { /* Ajusté la hauteur de la zone média dans la modale */
+                height: 250px;
+            }
+            .modal-details {
+                padding: 20px;
+            }
+            .footer-map {
+                height: 120px; /* Ajusté la hauteur de la carte */
+            }
+            .footer-map iframe {
+                width: 100%;
+                height: 100%;
+            }
+            /* Réduction supplémentaire pour le footer mobile */
+            footer {
+                padding: 30px 0 15px; /* Réduit le padding */
+            }
+            .footer-grid {
+                gap: 15px; /* Réduit le gap */
+                padding-bottom: 15px; /* Réduit le padding */
+                margin-bottom: 10px; /* Réduit le margin */
+            }
+            .footer-col h4 {
+                font-size: 1rem; /* Réduit la taille */
+                margin-bottom: 10px; /* Réduit le margin */
+            }
+            .footer-col ul li {
+                margin-bottom: 6px; /* Réduit le margin */
+            }
+            .copyright {
+                font-size: 0.75rem; /* Réduit la taille */
+                padding-top: 10px; /* Réduit le padding */
+            }
+        }
+        @media (max-width: 576px) {
+            .hero { min-height: 450px; } /* Ajusté la hauteur minimale */
+            .hero h1 { font-size: 1.8rem; }
+            .hero-content { width: 100%; }
+            .about-badge { bottom: 15px; right: 15px; padding: 15px; }
+            .about-badge h4 { font-size: 2rem; }
+            .contact-info, .contact-form { padding: 30px 20px; }
+            .section-padding { padding: 40px 0; }
+        }
+        @media (max-width: 400px) {
+            .hero h1 { font-size: 1.6rem; }
+            .hero p { font-size: 0.9rem; }
+            .section-header h2 { font-size: 1.6rem; }
+            .btn { padding: 10px 20px; font-size: 0.85rem; }
+            .formation-card { padding: 30px 20px; }
+        }
+    </style>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        // Initialiser EmailJS avec votre Public Key (clé utilisateur)
+        (function() {
+            emailjs.init("LxWRAnkoShgeMM7BV"); 
+        })();
+    </script>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="image/favicon-96x96.png"alt="Logo">
+                    <h1>RAY-Z</h1>
+                </a>
+            </div>
+            <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="index.html#about">À propos</a></li>
+                    <li><a href="index.html#services">Services</a></li>
+                    <li><a href="index.html#projects">Réalisations</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="formation.html" class="nav-formation active"><i class="fas fa-graduation-cap"></i> Formation Pro</a></li> <!-- Bouton Formation actif -->
+                    <li><a href="galerie.html" class="nav-galerie"><i class="fas fa-images"></i> Galerie</a></li>
+                    <li><a href="index.html#contact" class="nav-shop"><i class="fas fa-store"></i> Visiter Notre Boutique</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <!-- Hero Carousel Section -->
+    <section id="home" class="hero">
+        <!-- Les images du carrousel -->
+        <div class="hero-slide active fadeIn" style="background-image: url('./imagef/form1.jpg');">
+            <div class="container" style="height:100%; display:flex; align-items:center;">
+                <div class="hero-content scroll-animate">
+                    <h1>Devenez un Expert avec RAY-Z</h1>
+                    <p>Des formations professionnelles de pointe dans les domaines de la sécurité, de l'informatique et des réseaux.</p>
+                    <div class="hero-btns">
+                        <a href="#formations" class="btn btn-primary">Nos Programmes</a>
+                        <a href="#contact" class="btn btn-shop">Inscrivez-vous</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide slideInLeft" style="background-image: url('./imagef/form2.jpg');">
+            <div class="container" style="height:100%; display:flex; align-items:center;">
+                <div class="hero-content scroll-animate">
+                    <h1>Formation Pratique & Intensive</h1>
+                    <p>Apprenez les dernières technologies avec des professionnels expérimentés.</p>
+                    <div class="hero-btns">
+                        <a href="#formations" class="btn btn-primary">Découvrir</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide zoomIn" style="background-image: url('./imagef/form3.jpg');">
+            <div class="container" style="height:100%; display:flex; align-items:center;">
+                <div class="hero-content scroll-animate">
+                    <h1>Maîtrisez la Vidéosurveillance</h1>
+                    <p>Installation, configuration et maintenance des systèmes de surveillance modernes.</p>
+                    <div class="hero-btns">
+                        <a href="#formations" class="btn btn-primary">Voir la formation</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide slideIn" style="background-image: url('./imagef/form4.jpg');">
+            <div class="container" style="height:100%; display:flex; align-items:center;">
+                <div class="hero-content scroll-animate">
+                    <h1>Sécurité & Réseaux</h1>
+                    <p>Devenez un expert en alarmes, câblage et infrastructure réseau.</p>
+                    <div class="hero-btns">
+                        <a href="#formations" class="btn btn-primary">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide fadeInOnly" style="background-image: url('./imagef/form5.jpg');">
+            <div class="container" style="height:100%; display:flex; align-items:center;">
+                <div class="hero-content scroll-animate">
+                    <h1>Contrôle d'Accès & Biométrie</h1>
+                    <p>Formez-vous aux technologies d'identification avancées.</p>
+                    <div class="hero-btns">
+                        <a href="#formations" class="btn btn-primary">S'inscrire</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="hero-slide fadeIn" style="background-image: url('./imagef/form6.jpg');">
+            <div class="container" style="height:100%; display:flex; align-items:center;">
+                <div class="hero-content scroll-animate">
+                    <h1>Alarme Incendie</h1>
+                    <p>Formation sur les systèmes de détection et de prévention incendie.</p>
+                    <div class="hero-btns">
+                        <a href="#formations" class="btn btn-primary">Découvrir</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="hero-slide slideInLeft" style="background-image: url('./imagef/form7.jpg');">
+            <div class="container" style="height:100%; display:flex; align-items:center;">
+                <div class="hero-content scroll-animate">
+                    <h1>Télécom & Wi-Fi</h1>
+                    <p>Technologies sans fil, point-à-point et déploiement réseau.</p>
+                    <div class="hero-btns">
+                        <a href="#formations" class="btn btn-primary">S'inscrire</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Contrôles du carrousel -->
+        <div class="slide-controls">
+            <div class="control-dot active" onclick="manualSlide(0)"></div>
+            <div class="control-dot" onclick="manualSlide(1)"></div>
+            <div class="control-dot" onclick="manualSlide(2)"></div>
+            <div class="control-dot" onclick="manualSlide(3)"></div>
+            <div class="control-dot" onclick="manualSlide(4)"></div>
+            <div class="control-dot" onclick="manualSlide(5)"></div>
+            <div class="control-dot" onclick="manualSlide(6)"></div>
+        </div>
+    </section>
+    <section id="about" class="section-padding about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image scroll-animate">
+                    <i class="fas fa-graduation-cap"></i> <!-- Placeholder icon -->
+                </div>
+                <div class="about-text scroll-animate">
+                    <h3>Formation Professionnelle de Qualité</h3>
+                    <p>Chez RAY-Z, nous croyons que le développement des compétences est essentiel. Nos formations sont dispensées par des experts du terrain, avec un accent fort sur la pratique.</p>
+                    <p>Notre objectif est de vous préparer directement aux exigences du marché du travail en Afrique et en Europe.</p>
+                    <div class="about-stats">
+                        <div class="stat-item scroll-animate">
+                            <strong>100%</strong>
+                            <span>Pratique</span>
+                        </div>
+                        <div class="stat-item scroll-animate">
+                            <strong>95%</strong>
+                            <span>Emploi après Formation</span>
+                        </div>
+                        <div class="stat-item scroll-animate">
+                            <strong>6 Mois</strong>
+                            <span>Accompagnement</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="formations" class="section-padding formations">
+        <div class="container">
+            <div class="section-header scroll-animate">
+                <h2>Nos Programmes de Formation</h2>
+                <p>Choisissez la spécialité qui vous intéresse et développez vos compétences.</p>
+            </div>
+            <div class="formations-grid">
+                <div class="formation-card scroll-animate">
+                    <div class="formation-icon"><i class="fas fa-video"></i></div>
+                    <h3>Vidéosurveillance</h3>
+                    <p>Apprenez à installer, configurer et gérer des systèmes de vidéosurveillance professionnels (IP, analogiques, NVR/DVR).</p>
+                    <span class="duration">Durée: 1 mois</span>
+                    <a href="#contact" class="btn btn-primary" style="margin-top: 20px;">S'inscrire</a>
+                </div>
+                <div class="formation-card scroll-animate">
+                    <div class="formation-icon"><i class="fas fa-fire-extinguisher"></i></div>
+                    <h3>Alarme Incendie</h3>
+                    <p>Formation sur l'installation, la maintenance et la certification des systèmes d'alarme incendie conventionnels et adressables.</p>
+                    <span class="duration">Durée: 1 mois</span>
+                    <a href="#contact" class="btn btn-primary" style="margin-top: 20px;">S'inscrire</a>
+                </div>
+                <div class="formation-card scroll-animate">
+                    <div class="formation-icon"><i class="fas fa-fingerprint"></i></div>
+                    <h3>Alarme Intrusion</h3>
+                    <p>Maîtrisez les systèmes d'alarme anti-intrusion : détection, câblage, programmation et supervision.</p>
+                    <span class="duration">Durée: 1 mois</span>
+                    <a href="#contact" class="btn btn-primary" style="margin-top: 20px;">S'inscrire</a>
+                </div>
+                <div class="formation-card scroll-animate">
+                    <div class="formation-icon"><i class="fas fa-network-wired"></i></div>
+                    <h3>Informatique & Réseaux</h3>
+                    <p>Formation complète sur le câblage structuré, la gestion des serveurs, la sécurité réseau et la maintenance informatique.</p>
+                    <span class="duration">Durée: 2 mois</span>
+                    <a href="#contact" class="btn btn-primary" style="margin-top: 20px;">S'inscrire</a>
+                </div>
+                <div class="formation-card scroll-animate">
+                    <div class="formation-icon"><i class="fas fa-lock"></i></div>
+                    <h3>Contrôle d'Accès</h3>
+                    <p>Installation et gestion de systèmes de contrôle d'accès biométriques, par badge et digicodes.</p>
+                    <span class="duration">Durée: 1 mois</span>
+                    <a href="#contact" class="btn btn-primary" style="margin-top: 20px;">S'inscrire</a>
+                </div>
+                <div class="formation-card scroll-animate">
+                    <div class="formation-icon"><i class="fas fa-wifi"></i></div>
+                    <h3>Télécom & Wi-Fi</h3>
+                    <p>Technologies sans fil, point-à-point, point-à-multipoint, et déploiement de bornes Wi-Fi haute densité.</p>
+                    <span class="duration">Durée: 1 mois</span>
+                    <a href="#contact" class="btn btn-primary" style="margin-top: 20px;">S'inscrire</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="contact" class="section-padding" style="background-color: #f8fafc;">
+        <div class="container">
+            <div class="section-header scroll-animate">
+                <h2>Contactez-Nous pour les Formations</h2>
+                <p>Rejoignez-nous et démarrez votre parcours professionnel dès aujourd'hui.</p>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info scroll-animate">
+                    <h3>Informations</h3>
+                    <p>Notre équipe pédagogique est disponible pour répondre à toutes vos questions sur les formations.</p>
+                    <br>
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>Adresse:</strong><br>marcher logpom, Douala
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <strong>Téléphone:</strong><br>
+                            <a href="tel:+237650316954" style="color: white;">+237 6 83 17 88 84</a><br>
+                            <a href="tel:+237691234567" style="color: white;">+237 6 91 23 45 67</a>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <strong>Email:</strong><br>
+                            <a href="mailto:formation@ray-zentreprise.com" style="color: white;">formation@ray-zentreprise.com</a>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <strong>Horaires:</strong><br>8h - 18h, 6 jours sur 7
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form scroll-animate">
+                    <form id="formationContactForm">
+                        <div class="form-group">
+                            <input type="text" name="user_name" class="form-control" placeholder="Votre nom complet" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="email" name="user_email" class="form-control" placeholder="Votre email" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="tel" name="user_phone" class="form-control" placeholder="Votre numéro de téléphone" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select name="formation" id="formationSelect" class="form-control" required>
+                                <option value="">Formation concernée (Sélectionner)</option>
+                                <option value="video">Vidéosurveillance</option>
+                                <option value="incendie">Alarme Incendie</option>
+                                <option value="intrusion">Alarme Intrusion</option>
+                                <option value="reseau">Informatique & Réseaux</option>
+                                <option value="controleur">Contrôle d'Accès</option>
+                                <option value="telecom">Télécom & Wi-Fi</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="message" class="form-control" rows="5" placeholder="Votre message (expérience, objectifs, etc.)..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%">Envoyer la demande</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="margin-bottom:10px;">
+                        <a href="index.html" style="color:white; display:flex; align-items:center; gap:8px;">
+                            <img src="image/favicon-96x96.png" alt="Logo" style="width: 30px; height: 30px;">
+                            <h3 style="margin:0; color:white; font-size: 1.2rem;">RAY-Z</h3>
+                        </a>
+                    </div>
+                    <p style="font-size: 0.85rem;">Solutions technologiques innovantes pour entreprises et particuliers.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Liens Rapides</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="index.html#about">À Propos</a></li>
+                        <li><a href="index.html#projects">Réalisations</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                        <li><a href="#">Formation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Formations Clés</h4>
+                    <ul>
+                        <li><a href="#formations">Vidéosurveillance</a></li>
+                        <li><a href="#formations">Alarme Incendie</a></li>
+                        <li><a href="#formations">Alarme Intrusion</a></li>
+                        <li><a href="#formations">Informatique & Réseaux</a></li>
+                        <li><a href="#formations">Contrôle d'Accès</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact & Support</h4>
+                    <div class="info-item" style="color:#94a3b8; margin-bottom:8px; font-size: 0.85rem;">
+                        <i class="fas fa-map-marker-alt" style="margin-right:8px;"></i> marcher logpom, Douala
+                    </div>
+                    <div class="info-item" style="color:#94a3b8; margin-bottom:8px; font-size: 0.85rem;">
+                        <i class="fas fa-phone-alt" style="margin-right:8px;"></i> 
+                        <a href="tel:+237650316954" style="color:#94a3b8;">+237 6 83 17 88 84</a>
+                    </div>
+                    <p style="margin-top:8px; font-size: 0.85rem;"><strong>Email:</strong> <a href="mailto:formation@ray-zentreprise.com" style="color:#94a3b8;">formation@ray-zentreprise.com</a></p>
+                    <div class="social-links" style="margin-top:10px;">
+                        <a href="https://wa.me/message/R5CLNKONGTG2O1" target="_blank" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.facebook.com/rayzentreprise/about?locale=fr_FR" target="_blank" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.linkedin.com/company/ray-z-entreprise-sarl/" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.tiktok.com/@rayzentreprise" target="_blank" class="social-link"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 RAY-Z. Tous droits réservés.
+            </div>
+        </div>
+    </footer>
+    <a href="https://wa.me/message/R5CLNKONGTG2O1" target="_blank" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    <script>
+        // --- SCROLL ANIMATION ---
+        function initScrollAnimation() {
+            const elements = document.querySelectorAll('.scroll-animate');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animated');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            elements.forEach(element => {
+                observer.observe(element);
+            });
+        }
+        // --- CAROUSEL LOGIC ---
+        let heroIndex = 0;
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.control-dot');
+        const transitions = ['fadeIn', 'slideInLeft', 'zoomIn', 'slideIn', 'fadeInOnly', 'fadeIn', 'slideInLeft'];
+        function showHero(n) {
+            heroSlides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            // Retirer la classe de transition précédente
+            heroSlides.forEach(s => {
+                transitions.forEach(t => s.classList.remove(t));
+            });
+            heroIndex = (n + heroSlides.length) % heroSlides.length;
+            // Ajouter une nouvelle classe de transition
+            const newTransition = transitions[heroIndex];
+            heroSlides[heroIndex].classList.add(newTransition);
+            setTimeout(() => {
+                heroSlides[heroIndex].classList.add('active');
+            }, 50); // Petit délai pour que la transition s'applique
+            dots[heroIndex].classList.add('active');
+        }
+        function manualSlide(n) { showHero(n); resetHeroTimer(); }
+        let heroTimer = setInterval(() => showHero(heroIndex + 1), 5000);
+        function resetHeroTimer() { clearInterval(heroTimer); heroTimer = setInterval(() => showHero(heroIndex + 1), 5000); }
+        // --- MOBILE MENU ---
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const nav = document.querySelector('nav');
+        const navLinks = document.querySelectorAll('nav a');
+        mobileToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            mobileToggle.innerHTML = nav.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if(!link.classList.contains('nav-shop') && !link.classList.contains('nav-formation') && !link.classList.contains('nav-galerie')) {
+                    nav.classList.remove('active');
+                    mobileToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
+        // Initialisation des animations
+        document.addEventListener('DOMContentLoaded', () => {
+             initScrollAnimation();
+             showHero(0); // Afficher la première diapositive au chargement
+        });
+        // --- EMAILJS CONFIGURATION ---
+        document.getElementById('formationContactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // 🚨 REMPLACER 'YOUR_SERVICE_ID' et 'YOUR_TEMPLATE_ID' par vos valeurs EmailJS
+            const serviceID = 'service_7bwv2ug';      
+            const templateID = 'template_fstaiez';    
+            emailjs.sendForm(serviceID, templateID, this)
+                .then(() => {
+                    alert("✅ Merci ! Votre demande de formation a été envoyée avec succès. Nous vous répondrons en moins de 2h.");
+                    this.reset();
+                }, (err) => {
+                    alert('❌ Une erreur est survenue. Veuillez réessayer ou utiliser le téléphone.');
+                    console.error('Erreur EmailJS:', err);
+                });
+        });
+        // --- FIN EMAILJS CONFIGURATION ---
+    </script>
+</body>
+</html>

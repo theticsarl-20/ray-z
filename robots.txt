@@ -1,0 +1,23 @@
+# Fichier robots.txt pour RAY-Z - Solutions de Sécurité & Connectivité
+# https://www.robotstxt.org/
+
+# Indiquer l'emplacement du fichier sitemap
+Sitemap: https://www.ray-zentreprise.com/sitemap.xml
+
+# Autoriser l'exploration de tout le site pour les moteurs de recherche majeurs
+User-agent: *
+Allow: /
+
+# Spécifier les fichiers ou dossiers à exclure (facultatif)
+# Disallow: /cgi-bin/
+# Disallow: /private/
+# Disallow: /tmp/
+
+# Réduire la fréquence de crawl si nécessaire (optionnel, 10 secondes entre les requêtes)
+Crawl-delay: 10
+
+# Indiquer les versions mobiles des pages (si vous avez un site mobile distinct)
+# Mobile: https://m.example.com/page
+
+# Autres directives possibles (selon les besoins)
+# Host: www.ray-zentreprise.com

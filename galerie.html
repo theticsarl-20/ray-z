@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAY-Z - Galerie de Réalisations</title>
+    <!-- Favicon animé -->
+    <link rel="icon" type="image/png" href="image/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="image/favicon.svg" />
+    <link rel="shortcut icon" href="image/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="image/apple-touch-icon.png" />
+    <link rel="manifest" href="image/site.webmanifest" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- VARIABLES & RESET (copiées de index.html) --- */
+        :root {
+            --primary: #0096D6;       /* Bleu Tech */
+            --primary-dark: #007bb0;
+            --secondary: #FF6B35;     /* Orange Action */
+            --dark: #0f172a;          /* Bleu nuit très sombre */
+            --text: #334155;          /* Gris texte */
+            --light: #FFFFFF;
+            --bg-gray: #f1f5f9;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 150, 214, 0.05);
+            --radius: 16px;
+            --header-height: 70px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--text);
+            background-color: var(--light);
+            overflow-x: hidden;
+            padding-top: var(--header-height);
+        }
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; font-weight: 700; line-height: 1.2; color: var(--dark); }
+        p { line-height: 1.7; margin-bottom: 1rem; }
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        img { width: 100%; height: auto; object-fit: cover; display: block; }
+        ul { list-style: none; }
+        /* --- SCROLL ANIMATIONS --- */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .scroll-animate.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* --- UTILS & BUTTONS (copiées de index.html) --- */
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 150, 214, 0.3); }
+        .btn-shop {
+            background: linear-gradient(135deg, var(--secondary) 0%, #e85d2a 100%);
+            color: white;
+        }
+        .btn-shop:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3); }
+        .section-padding { padding: 80px 0; }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        .section-header h2::after {
+            content: ''; display: block; width: 60px; height: 4px;
+            background: var(--primary); margin: 10px auto 0; border-radius: 2px;
+        }
+        .section-header p { color: #64748b; max-width: 600px; margin: 0 auto; font-size: 1.1rem; }
+        /* --- HEADER (copié de index.html) --- */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height);
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px);
+            box-shadow: 0 1px 15px rgba(0,0,0,0.05); z-index: 1000;
+            display: flex; align-items: center;
+        }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo a { display: flex; align-items: center; gap: 10px; }
+        .logo h1 { font-size: 1.5rem; color: var(--primary); margin: 0; letter-spacing: -0.5px; }
+        .logo img { width: 40px; height: 40px; }
+        nav ul { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; } /* Ajout flex-wrap et réduction du gap */
+        nav a { font-weight: 600; font-size: 0.9rem; position: relative; } /* Réduction de la taille */
+        nav a::after {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
+            background: var(--primary); transition: var(--transition);
+        }
+        nav a:hover::after, nav a.active::after { width: 100%; }
+        nav a:hover, nav a.active { color: var(--primary); }
+        /* Style spécifique pour les boutons dans la nav */
+        nav .nav-shop, nav .nav-formation, nav .nav-galerie {
+            color: white;
+            padding: 8px 12px; /* Réduction du padding */
+            border-radius: 50px;
+            margin-left: 8px; /* Réduction de la marge */
+            box-shadow: 0 4px 10px rgba(255, 107, 53, 0.3);
+            font-size: 0.85rem; /* Réduction de la taille du texte */
+        }
+        nav .nav-shop:hover, nav .nav-formation:hover, nav .nav-galerie:hover {
+            color: white;
+            transform: translateY(-1px);
+        }
+        nav .nav-shop { background: var(--secondary); }
+        nav .nav-formation { background: linear-gradient(135deg, var(--primary) 0%, #005f8a 100%); }
+        nav .nav-galerie { background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%); }
+        nav .nav-galerie { background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%); } /* Assure la couleur du bouton Galerie */
+        nav .nav-shop:hover { background: #e85d2a; }
+        nav .nav-formation:hover { background: #005f8a; }
+        nav .nav-galerie:hover { background: #9b59b6; }
+        nav .nav-shop::after, nav .nav-formation::after, nav .nav-galerie::after { content: none; }
+        .mobile-toggle { display: none; font-size: 1.5rem; cursor: pointer; color: var(--dark); }
+        /* --- GALLERY SECTION --- */
+        .gallery-section { background: var(--light); }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Grille responsive */
+            gap: 20px;
+            padding: 20px 0;
+        }
+        .gallery-item {
+            border-radius: var(--radius);
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--shadow);
+            opacity: 0; /* Pour l'animation de chargement */
+            transform: scale(0.8); /* Pour l'animation de chargement */
+            transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease;
+            aspect-ratio: 4 / 3; /* Maintenir un ratio d'aspect constant */
+        }
+        .gallery-item.loaded {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .gallery-item:hover {
+            box-shadow: var(--shadow-lg);
+            transform: scale(1.03); /* Légère augmentation au survol */
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Remplir le conteneur */
+            transition: transform 0.5s ease; /* Pour l'effet zoom au survol */
+        }
+        .gallery-item:hover img {
+            transform: scale(1.05); /* Zoom léger sur l'image */
+        }
+        .gallery-item .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 20px 15px 10px;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        .gallery-item:hover .overlay {
+            transform: translateY(0);
+        }
+        .gallery-item .overlay h3 {
+            margin: 0 0 5px 0;
+            font-size: 1rem;
+            color: white;
+        }
+        .gallery-item .overlay p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #cbd5e1;
+        }
+        .loading-indicator {
+            text-align: center;
+            padding: 30px;
+            color: var(--text);
+            font-style: italic;
+        }
+        /* --- FOOTER (copié de index.html) --- */
+        footer { 
+            background: #0f172a; 
+            color: #94a3b8; 
+            padding: 40px 0 20px; /* Réduit le padding */
+            font-size: 0.9rem; /* Réduction de la taille */
+            position: relative;
+        }
+        .footer-grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Ajustement pour mobile */
+            gap: 20px; /* Réduit le gap */
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            padding-bottom: 25px; /* Réduit le padding */
+            margin-bottom: 15px; /* Réduit le margin */
+        }
+        .footer-col h4 { color: white; font-size: 1rem; margin-bottom: 15px; } /* Réduit la taille et le margin */
+        .footer-col ul li { margin-bottom: 8px; } /* Réduit le margin */
+        .footer-col a:hover { color: var(--primary); }
+        .footer-col .social-links a { 
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.1); /* Réduit la taille */
+            color: white; margin-right: 8px; font-size: 0.85rem; /* Réduit la taille */
+        }
+        .footer-col .social-links a:hover { background: var(--primary); }
+        .copyright { 
+            text-align: center; 
+            font-size: 0.75rem; /* Réduit la taille */
+            color: #64748b; 
+            padding-top: 15px; /* Réduit le padding */
+        }
+        /* Footer Map */
+        .footer-map {
+            margin-top: 20px; /* Réduit le margin */
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            height: 150px; /* Réduit la hauteur */
+        }
+        .footer-map iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        /* --- RESPONSIVE (copié de index.html) --- */
+        @media (max-width: 1200px) {
+            .hero h1 { font-size: 3rem; }
+        }
+        @media (max-width: 992px) {
+            .about-grid, .contact-container { grid-template-columns: 1fr; }
+            .contact-info { padding: 40px; text-align: center; }
+            .contact-info .info-item { justify-content: center; }
+            .contact-form { padding: 40px; }
+            .hero h1 { font-size: 2.5rem; }
+            .section-padding { padding: 60px 0; }
+        }
+        @media (max-width: 768px) {
+            .section-padding { padding: 50px 0; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1rem; }
+            .hero-btns { flex-direction: column; align-items: flex-start; }
+            .hero-btns .btn { width: 100%; justify-content: center; }
+            nav { 
+                display: none; 
+                position: fixed; 
+                top: var(--header-height); 
+                left: 0; 
+                width: 100%; 
+                height: calc(100vh - var(--header-height));
+                background: white; 
+                padding: 25px 0; /* Réduction du padding */
+                box-shadow: var(--shadow);
+                overflow-y: auto;
+            }
+            nav.active { display: block; }
+            nav ul { 
+                flex-direction: column; 
+                gap: 15px; /* Réduction du gap */
+                padding: 0 15px; /* Réduction du padding */
+                text-align: center;
+            }
+            nav ul li { width: 100%; }
+            nav a { 
+                display: block; 
+                padding: 10px 0; /* Réduction du padding */
+                font-size: 0.95rem; /* Réduction de la taille */
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+            }
+            nav .nav-shop, nav .nav-formation, nav .nav-galerie { 
+                margin: 12px auto 0; /* Réduction de la marge */
+                width: 85%; /* Légère réduction de la largeur */
+                padding: 8px 10px; /* Réduction du padding */
+            }
+            .mobile-toggle { display: block; }
+            .about-grid { gap: 25px; } /* Réduction du gap */
+            .about-image { min-height: 300px; } /* Réduction de la hauteur */
+            .about-stats { grid-template-columns: 1fr; gap: 12px; } /* Réduction du gap */
+            .services-grid { grid-template-columns: 1fr; } /* Une colonne sur mobile */
+            .service-actions { flex-direction: column; } /* Boutons en colonne sur mobile */
+            /* GALLERY - Responsive grid */
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Ajuste la taille min sur mobile */
+                gap: 15px; /* Réduction du gap */
+            }
+            .gallery-item {
+                aspect-ratio: 3 / 2; /* Ajuste le ratio sur mobile */
+            }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .footer-col .social-links { justify-content: center; }
+            .form-row { flex-direction: column; gap: 0; }
+            .whatsapp-float { width: 50px; height: 50px; bottom: 20px; right: 20px; font-size: 24px; }
+            .section-header h2 { font-size: 1.8rem; }
+            .section-header p { font-size: 1rem; }
+            .modal-content {
+                margin: 10px;
+            }
+            .modal-media-container { /* Ajusté la hauteur de la zone média dans la modale */
+                height: 250px;
+            }
+            .modal-details {
+                padding: 20px;
+            }
+            .footer-map {
+                height: 120px; /* Ajusté la hauteur de la carte */
+            }
+            .footer-map iframe {
+                width: 100%;
+                height: 100%;
+            }
+            /* Réduction supplémentaire pour le footer mobile */
+            footer {
+                padding: 30px 0 15px; /* Réduit le padding */
+            }
+            .footer-grid {
+                gap: 15px; /* Réduit le gap */
+                padding-bottom: 15px; /* Réduit le padding */
+                margin-bottom: 10px; /* Réduit le margin */
+            }
+            .footer-col h4 {
+                font-size: 1rem; /* Réduit la taille */
+                margin-bottom: 10px; /* Réduit le margin */
+            }
+            .footer-col ul li {
+                margin-bottom: 6px; /* Réduit le margin */
+            }
+            .copyright {
+                font-size: 0.75rem; /* Réduit la taille */
+                padding-top: 10px; /* Réduit le padding */
+            }
+        }
+        @media (max-width: 576px) {
+            .hero { min-height: 450px; } /* Ajusté la hauteur minimale */
+            .hero h1 { font-size: 1.8rem; }
+            .hero-content { width: 100%; }
+            .about-badge { bottom: 15px; right: 15px; padding: 15px; }
+            .about-badge h4 { font-size: 2rem; }
+            .contact-info, .contact-form { padding: 30px 20px; }
+            .section-padding { padding: 40px 0; }
+            .gallery-grid {
+                grid-template-columns: 1fr; /* Une colonne sur très petits écrans */
+            }
+        }
+        @media (max-width: 400px) {
+            .hero h1 { font-size: 1.6rem; }
+            .hero p { font-size: 0.9rem; }
+            .section-header h2 { font-size: 1.6rem; }
+            .btn { padding: 10px 20px; font-size: 0.85rem; }
+            .service-card { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="image/favicon-96x96.png"alt="Logo">
+                    <h1>RAY-Z</h1>
+                </a>
+            </div>
+            <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="index.html#about">À propos</a></li>
+                    <li><a href="index.html#services">Services</a></li>
+                    <li><a href="index.html#projects">Réalisations</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                    <li><a href="formation.html" class="nav-formation"><i class="fas fa-graduation-cap"></i> Formation Pro</a></li>
+                    <li><a href="galerie.html" class="nav-galerie active"><i class="fas fa-images"></i> Galerie</a></li> <!-- Bouton Galerie actif -->
+                    <li><a href="https://shop.thetic.de" target="_blank" class="nav-shop"><i class="fas fa-store"></i> Visiter Notre Boutique</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <section class="section-padding gallery-section">
+        <div class="container">
+            <div class="section-header scroll-animate">
+                <h2>Notre Galerie de Réalisations</h2>
+                <p>Découvrez une sélection de nos meilleurs projets et installations.</p>
+            </div>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Les images seront ajoutées ici par JavaScript -->
+            </div>
+            <div class="loading-indicator" id="loadingIndicator">
+                Chargement des images...
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="margin-bottom:10px;">
+                        <a href="index.html" style="color:white; display:flex; align-items:center; gap:8px;">
+                            <img src="image/favicon-96x96.png" alt="Logo" style="width: 30px; height: 30px;">
+                            <h3 style="margin:0; color:white; font-size: 1.1rem;">RAY-Z</h3>
+                        </a>
+                    </div>
+                    <p style="font-size: 0.85rem;">Solutions technologiques innovantes pour entreprises et particuliers.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Liens Rapides</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="index.html#about">À Propos</a></li>
+                        <li><a href="index.html#projects">Réalisations</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                        <li><a href="formation.html">Formation</a></li>
+                        <li><a href="galerie.html">Galerie</a></li> <!-- Lien vers la galerie -->
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Services Clés</h4>
+                    <ul>
+                        <li><a href="index.html#services">Vidéosurveillance</a></li>
+                        <li><a href="index.html#services">Contrôle d'Accès</a></li>
+                        <li><a href="index.html#services">Alarme Intrusion</a></li>
+                        <li><a href="index.html#services">Réseaux Informatiques</a></li>
+                        <li><a href="index.html#formation">Télécom & Wi-Fi</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact & Support</h4>
+                    <div class="info-item" style="color:#94a3b8; margin-bottom:8px; font-size: 0.85rem;">
+                        <i class="fas fa-map-marker-alt" style="margin-right:8px;"></i> marcher logpom, Douala
+                    </div>
+                    <div class="info-item" style="color:#94a3b8; margin-bottom:8px; font-size: 0.85rem;">
+                        <i class="fas fa-phone-alt" style="margin-right:8px;"></i> 
+                        <a href="tel:+237650316954" style="color:#94a3b8;">+237 6 83 17 88 84</a>
+                    </div>
+                    <p style="margin-top:8px; font-size: 0.85rem;"><strong>Email:</strong> <a href="mailto:info@ray-zentreprise.com" style="color:#94a3b8;">info@ray-zentreprise.com</a></p>
+                    <div class="social-links" style="margin-top:10px;">
+                        <a href="https://wa.me/message/R5CLNKONGTG2O1" target="_blank" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.facebook.com/rayzentreprise/about?locale=fr_FR" target="_blank" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.linkedin.com/company/ray-z-entreprise-sarl/" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.tiktok.com/@rayzentreprise" target="_blank" class="social-link"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Carte Google Maps dans le footer -->
+            <div class="footer-map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3980.948242299743!2d9.762323674993962!3d4.085782395993147!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10610d688c75b575%3A0x16552b0e97c5ff79!2sRAY-Z%20ENTREPRISE%20SARL!5e1!3m2!1sfr!2scm!4v1731862834986!5m2!1sfr!2scm" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div class="copyright">
+                &copy; 2025 RAY-Z. Tous droits réservés.
+            </div>
+        </div>
+    </footer>
+    <a href="https://wa.me/message/R5CLNKONGTG2O1" target="_blank" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    <script>
+        // --- GALLERY DATA & LOADING ---
+        // Simuler un grand nombre d'images avec un nom de fichier unique
+        const galleryData = [];
+        const totalImages = 50; // Changez ce nombre pour plus ou moins d'images
+        for (let i = 1; i <= totalImages; i++) {
+            // Remplacez "galerie/image1.jpg", "galerie/image2.jpg", etc. par vos vrais noms d'images
+            // Ici, on utilise des placeholders pour la démo
+            galleryData.push({
+                src: `./galerie/image${i}.jpg`, // Assurez-vous d'avoir ces fichiers dans le dossier ./galerie/
+                title: `Projet ${i}`,
+                desc: `Description du projet numéro ${i}. Installation, câblage, surveillance.`
+            });
+        }
+
+        const galleryGrid = document.getElementById('galleryGrid');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        let loadedCount = 0;
+        const batchSize = 8; // Nombre d'images à charger à chaque fois
+
+        // Fonction pour créer un élément de galerie
+        function createGalleryItem(item) {
+            const div = document.createElement('div');
+            div.className = 'gallery-item scroll-animate';
+            div.innerHTML = `
+                <img src="${item.src}" alt="${item.title}" loading="lazy">
+                <div class="overlay">
+                    <h3>${item.title}</h3>
+                    <p>${item.desc}</p>
+                </div>
+            `;
+            return div;
+        }
+
+        // Fonction pour charger un lot d'images
+        function loadBatch() {
+            const batch = galleryData.slice(loadedCount, loadedCount + batchSize);
+            batch.forEach(item => {
+                const galleryItem = createGalleryItem(item);
+                galleryGrid.appendChild(galleryItem);
+                // Simuler le chargement de l'image pour déclencher l'animation
+                const img = galleryItem.querySelector('img');
+                if (img.complete) {
+                    galleryItem.classList.add('loaded');
+                } else {
+                    img.addEventListener('load', () => {
+                        galleryItem.classList.add('loaded');
+                    });
+                    img.addEventListener('error', () => {
+                        // Gérer les erreurs de chargement d'image si nécessaire
+                        galleryItem.remove(); // Retirer l'élément si l'image n'existe pas
+                    });
+                }
+            });
+            loadedCount += batch.length;
+
+            // Cacher l'indicateur de chargement si tout est chargé
+            if (loadedCount >= galleryData.length) {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+
+        // Charger le premier lot au chargement de la page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBatch();
+            initScrollAnimation(); // Réinitialiser les animations pour la nouvelle galerie
+        });
+
+        // Charger plus d'images lors du défilement
+        window.addEventListener('scroll', () => {
+            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+            if (scrollTop + clientHeight >= scrollHeight - 500 && loadedCount < galleryData.length) { // 500px avant la fin
+                loadBatch();
+            }
+        });
+
+        // --- SCROLL ANIMATION (copiée de index.html) ---
+        function initScrollAnimation() {
+            const elements = document.querySelectorAll('.scroll-animate');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animated');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            elements.forEach(element => {
+                observer.observe(element);
+            });
+        }
+
+        // --- MOBILE MENU (copié de index.html) ---
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const nav = document.querySelector('nav');
+        const navLinks = document.querySelectorAll('nav a');
+        mobileToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            mobileToggle.innerHTML = nav.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if(!link.classList.contains('nav-shop') && !link.classList.contains('nav-formation') && !link.classList.contains('nav-galerie')) {
+                    nav.classList.remove('active');
+                    mobileToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
